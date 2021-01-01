@@ -41,9 +41,9 @@ stdenv.mkDerivation {
                  --disable-nls \
                  --disable-werror
     make
+    # make -k check
     make install
     cd ../..
-
 
     cd gcc-10.2.0
     mv ../mpfr-4.1.0 mpfr
@@ -53,7 +53,7 @@ stdenv.mkDerivation {
         -i.orig gcc/config/i386/t-linux64
     mkdir build
     cd build
-    ../configure \
+    CXXFLAGS=-Wno-error=format-security ../configure \
         --target=$LFS_TGT                              \
         --prefix=$LFS/tools                            \
         --with-glibc-version=2.11                      \
