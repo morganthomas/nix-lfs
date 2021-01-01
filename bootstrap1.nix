@@ -4,7 +4,7 @@ stdenv.mkDerivation {
   name = "lfs";
   src = ./src;
   buildInputs = [
-    bash binutils bison bzip2 coreutils findutils gawk gcc gnugrep gzip m4 gnumake patch perl python gnused gnutar texinfo xz which
+    bash binutils bison bzip2 coreutils findutils gawk gcc gnugrep gzip m4 gnumake patch perl python3 gnused gnutar texinfo xz which
   ];
   configurePhase = ''
   '';
@@ -30,7 +30,7 @@ stdenv.mkDerivation {
                  --disable-nls \
                  --disable-werror
     make
-    # make -k check
+    make -k check
     make install
     cd ../..
 
@@ -67,5 +67,10 @@ stdenv.mkDerivation {
     cd ..
     cat gcc/limitx.h gcc/glimits.h gcc/limity.h > \
         `dirname $($LFS_TGT-gcc -print-libgcc-file-name)`/install-tools/include/limits.h
+
+    # Use a tarball to preserve file attributes accurately
+    tar cvzf result.tar.gz $LFS
+    rm -rf $LFS/*
+    mv result.tar.gz $LFS
   '';
 }
