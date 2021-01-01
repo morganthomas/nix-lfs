@@ -4,7 +4,7 @@ stdenv.mkDerivation {
   name = "lfs";
   src = ./src;
   buildInputs = [
-    bash binutils bison bzip2 coreutils findutils gawk gcc glibc gnugrep gzip m4 gnumake patch perl python gnused gnutar texinfo xz which
+    bash binutils bison bzip2 coreutils findutils gawk gcc gnugrep gzip m4 gnumake patch perl python gnused gnutar texinfo xz which
   ];
   configurePhase = ''
   '';
