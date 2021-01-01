@@ -1,3 +1,4 @@
+with (import <nixpkgs> {});
 let bootstrap2 = import ./bootstrap2.nix; in
 stdenv.mkDerivation {
   name = "lfs";
@@ -14,6 +15,7 @@ stdenv.mkDerivation {
     source ./env.sh
     mkdir -p $LFS
     tar xzf ${bootstrap2.outPath}/result.tar.gz -C $LFS
+    rm -rf $LFS/${bootstrap2.outPath}/nix
     mv $LFS/${bootstrap2.outPath}/* $LFS
 
     #
@@ -23,7 +25,9 @@ stdenv.mkDerivation {
     echo "TESTING TOOLCHAIN"
     echo 'int main(){}' > dummy.c
     $LFS_TGT-gcc dummy.c
-    readelf -l a.out | group '/ld-linux'
+    readelf -l a.out | grep '/ld-linux'
+    echo "FINISHED TEST"
+    exit 1
 
     echo "MKHEADERS"
     $LFS/tools/libexec/gcc/$LFS_TGT/10.2.0/install-tools/mkheaders
