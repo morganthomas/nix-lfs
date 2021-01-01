@@ -48,30 +48,6 @@ stdenv.mkDerivation {
     make DESTDIR=$LFS install
     cd ..
 
-    echo "TESTING TOOLCHAIN"
-    echo 'int main(){}' > dummy.c
-    $LFS_TGT-gcc dummy.c
-    readelf -l a.out | group '/ld-linux'
-
-    echo "MKHEADERS"
-    $LFS/tools/libexec/gcc/$LFS_TGT/10.2.0/install-tools/mkheaders
-
-    echo "BUILDING LIBSTDC++"
-    cd gcc-10.2.0
-    mkdir build
-    cd build
-    ../libstdc++-v3/configure           \
-        --host=$LFS_TGT                 \
-        --build=$(../config.guess)      \
-        --prefix=/usr                   \
-        --disable-multilib              \
-        --disable-nls                   \
-        --disable-libstdcxx-pch         \
-        --with-gxx-include-dir=/tools/$LFS_TGT/include/c++/10.2.0
-    make
-    make DESTDIR=$LFS install
-    cd ..
-
     tar cvzf result.tar.gz $LFS
     rm -rf $LFS/*
     mv result.tar.gz $LFS
