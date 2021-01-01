@@ -1,0 +1,281 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content=
+    "application/xhtml+xml; charset=iso-8859-1" />
+    <title>
+      7.14.&nbsp;Cleaning up and Saving the Temporary System
+    </title>
+    <link rel="stylesheet" type="text/css" href="../stylesheets/lfs.css" />
+    <meta name="generator" content="DocBook XSL Stylesheets V1.79.1" />
+    <link rel="stylesheet" href="../stylesheets/lfs-print.css" type=
+    "text/css" media="print" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  </head>
+  <body class="lfs" id="lfs-10.0">
+    <div class="navheader">
+      <h4>
+        Linux From Scratch - Version 10.0
+      </h4>
+      <h3>
+        Chapter&nbsp;7.&nbsp;Entering Chroot and Building Additional
+        Temporary Tools
+      </h3>
+      <ul>
+        <li class="prev">
+          <a accesskey="p" href="util-linux.html" title=
+          "Util-linux-2.36">Prev</a>
+          <p>
+            Util-linux-2.36
+          </p>
+        </li>
+        <li class="next">
+          <a accesskey="n" href="../part4.html" title=
+          "Building the LFS System">Next</a>
+          <p>
+            Building the LFS System
+          </p>
+        </li>
+        <li class="up">
+          <a accesskey="u" href="chapter07.html" title=
+          "Chapter&nbsp;7.&nbsp;Entering Chroot and Building Additional Temporary Tools">
+          Up</a>
+        </li>
+        <li class="home">
+          <a accesskey="h" href="../index.html" title=
+          "Linux From Scratch - Version 10.0 ">Home</a>
+        </li>
+      </ul>
+    </div>
+    <div class="sect1" lang="en" xml:lang="en">
+      <h1 class="sect1">
+        <a id="ch-tools-stripping" name="ch-tools-stripping"></a>7.14.
+        Cleaning up and Saving the Temporary System
+      </h1>
+      <p>
+        The libtool .la files are only useful when linking with static
+        libraries. They are unneeded, and potentially harmful, when using
+        dynamic shared libraries, specially when using non-autotools build
+        systems. While still in chroot, remove those files now:
+      </p>
+      <pre class="userinput">
+<kbd class="command">find /usr/{lib,libexec} -name \*.la -delete</kbd>
+</pre>
+      <p>
+        Remove the documentation of the temporary tools, to prevent them from
+        ending up in the final system, and save about 35 MB:
+      </p>
+      <pre class="userinput">
+<kbd class="command">rm -rf /usr/share/{info,man,doc}/*</kbd>
+</pre>
+      <div class="admon note">
+        <img alt="[Note]" src="../images/note.png" />
+        <h3>
+          Note
+        </h3>
+        <p>
+          All the remaining steps in this section are optional. Nevertheless,
+          as soon as you begin installing packages in <a class="xref" href=
+          "../chapter08/chapter08.html" title=
+          "Chapter&nbsp;8.&nbsp;Installing Basic System Software">Chapter&nbsp;8</a>,
+          the temporary tools will be overwritten. So it may be a good idea
+          to do a backup of the temporary tools as described below. The other
+          steps are only needed if you are really short on disk space.
+        </p>
+      </div>
+      <p>
+        The following steps are performed from outside the chroot
+        environment. That means, you have to leave the chroot environment
+        first before continuing. The reason for that is to:
+      </p>
+      <div class="itemizedlist">
+        <ul>
+          <li class="listitem">
+            <p>
+              make sure that objects are not in use while they are
+              manipulated.
+            </p>
+          </li>
+          <li class="listitem">
+            <p>
+              get access to file system locations outside of the chroot
+              environment to store/read the backup archive which should not
+              be placed within the <code class="filename">$LFS</code>
+              hierarchy for safety reasons.
+            </p>
+          </li>
+        </ul>
+      </div>
+      <p>
+        Leave the chroot environment and unmount the kernel virtual file
+        systems:
+      </p>
+      <div class="admon note">
+        <img alt="[Note]" src="../images/note.png" />
+        <h3>
+          Note
+        </h3>
+        <p>
+          All of the following instructions are executed by <code class=
+          "systemitem">root</code>. Take extra care about the commands you're
+          going to run as mistakes here can modify your host system. Be aware
+          that the environment variable <code class="envar">LFS</code> is set
+          for user <code class="systemitem">lfs</code> by default but it
+          might <span class="emphasis"><em>not</em></span> be set for
+          <code class="systemitem">root</code>. Whenever commands are to be
+          executed by <code class="systemitem">root</code>, make sure you
+          have set <code class="envar">LFS</code> accordingly. This has been
+          discussed in <a class="xref" href="../chapter02/aboutlfs.html"
+          title="2.6.&nbsp;Setting The $LFS Variable">Section&nbsp;2.6,
+          &ldquo;Setting The $LFS Variable&rdquo;</a>.
+        </p>
+      </div>
+      <pre class="userinput">
+<kbd class="command">exit
+umount $LFS/dev{/pts,}
+umount $LFS/{sys,proc,run}</kbd>
+</pre>
+      <div class="sect2" lang="en" xml:lang="en">
+        <h2 class="sect2">
+          7.14.1. Stripping
+        </h2>
+        <p>
+          If the LFS partition is rather small, it is good to know that
+          unnecessary items can be removed. The executables and libraries
+          built so far contain a little over 90 MB of unneeded debugging
+          symbols.
+        </p>
+        <p>
+          Strip off debugging symbols from binaries:
+        </p>
+        <pre class="userinput">
+<kbd class="command">strip --strip-debug $LFS/usr/lib/*
+strip --strip-unneeded $LFS/usr/{,s}bin/*
+strip --strip-unneeded $LFS/tools/bin/*</kbd>
+</pre>
+        <p>
+          These commands will skip a number of files reporting that it does
+          not recognize their file format. Most of these are scripts instead
+          of binaries.
+        </p>
+        <p>
+          Take care <span class="emphasis"><em>NOT</em></span> to use
+          <em class="parameter"><code>--strip-unneeded</code></em> on the
+          libraries. The static ones would be destroyed and the toolchain
+          packages would need to be built all over again.
+        </p>
+        <p>
+          At this point, you should have at least 5 GB of free space on the
+          chroot partition that can be used to build and install Glibc and
+          GCC in the next phase. If you can build and install Glibc, you can
+          build and install the rest too. You can check the free disk space
+          with the command <span class="command"><strong>df -h
+          $LFS</strong></span>.
+        </p>
+      </div>
+      <div class="sect2" lang="en" xml:lang="en">
+        <h2 class="sect2">
+          7.14.2. Backup
+        </h2>
+        <p>
+          Now that the essential tools have been created, its time to think
+          about a backup. When every check has passed successfully in the
+          previously built packages, your temporary tools are in a good state
+          and might be backed up for later reuse. In case of fatal failures
+          in the subsequent chapters, it often turns out that removing
+          everything and starting over (more carefully) is the best option to
+          recover. Unfortunately, all the temporary tools will be removed,
+          too. To avoid spending extra time to redo something which has been
+          built successfully, prepare a backup.
+        </p>
+        <p>
+          Make sure you have at least 600 MB free disk space (the source
+          tarballs will be included in the backup archive) in the home
+          directory of user <code class="systemitem">root</code>.
+        </p>
+        <p>
+          Create the backup archive by running the following command:
+        </p>
+        <pre class="userinput">
+<kbd class="command">cd $LFS &amp;&amp;
+tar -cJpf $HOME/lfs-temp-tools-10.0.tar.xz .</kbd>
+</pre>
+        <p>
+          Replace <code class="envar">$HOME</code> by a directory of your
+          choice if you do not want to have the backup stored in <code class=
+          "systemitem">root</code>'s home directory.
+        </p>
+      </div>
+      <div class="sect2" lang="en" xml:lang="en">
+        <h2 class="sect2">
+          7.14.3. Restore
+        </h2>
+        <p>
+          In case some mistakes have been made and you need to start over,
+          you can use this backup to restore the temporary tools and save
+          some recovery time. Since the sources are located under
+          <code class="filename">$LFS</code>, they are included in the backup
+          archive as well, so they do not need to be downloaded again. After
+          checking that <code class="envar">$LFS</code> is set properly,
+          restore the backup by executing the following commands:
+        </p>
+        <pre class="screen">
+<code class="computeroutput">cd $LFS &amp;&amp;
+rm -rf ./* &amp;&amp;
+tar -xpf $HOME/lfs-temp-tools-10.0.tar.xz</code>
+</pre>
+        <p>
+          Again, double check that the environment has been setup properly
+          and continue building the rest of the system.
+        </p>
+        <div class="admon important">
+          <img alt="[Important]" src="../images/important.png" />
+          <h3>
+            Important
+          </h3>
+          <p>
+            If you left the chroot environment either to strip off debug
+            symbols, create a backup, or restart building using a restore,
+            remember to mount the kernel virtual filesystems now again as
+            described in <a class="xref" href="kernfs.html" title=
+            "7.3.&nbsp;Preparing Virtual Kernel File Systems">Section&nbsp;7.3,
+            &ldquo;Preparing Virtual Kernel File Systems&rdquo;</a> and
+            re-enter the chroot environment (see <a class="xref" href=
+            "chroot.html" title=
+            "7.4.&nbsp;Entering the Chroot Environment">Section&nbsp;7.4,
+            &ldquo;Entering the Chroot Environment&rdquo;</a>) again before
+            continuing.
+          </p>
+        </div>
+      </div>
+    </div>
+    <div class="navfooter">
+      <ul>
+        <li class="prev">
+          <a accesskey="p" href="util-linux.html" title=
+          "Util-linux-2.36">Prev</a>
+          <p>
+            Util-linux-2.36
+          </p>
+        </li>
+        <li class="next">
+          <a accesskey="n" href="../part4.html" title=
+          "Building the LFS System">Next</a>
+          <p>
+            Building the LFS System
+          </p>
+        </li>
+        <li class="up">
+          <a accesskey="u" href="chapter07.html" title=
+          "Chapter&nbsp;7.&nbsp;Entering Chroot and Building Additional Temporary Tools">
+          Up</a>
+        </li>
+        <li class="home">
+          <a accesskey="h" href="../index.html" title=
+          "Linux From Scratch - Version 10.0 ">Home</a>
+        </li>
+      </ul>
+    </div>
+  </body>
+</html>

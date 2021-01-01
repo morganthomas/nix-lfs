@@ -1,0 +1,82 @@
+.\" Copyright 1999, George Staikos (staikos@0wned.org)
+.\" This file may be used subject to the terms and conditions of the
+.\" GNU General Public License Version 2, or any later version
+.\" at your option, as published by the Free Software Foundation.
+.\" This program is distributed in the hope that it will be useful,
+.\" but WITHOUT ANY WARRANTY; without even the implied warranty of
+.\" MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+.\" GNU General Public License for more details."
+.\"*******************************************************************
+.\"
+.\" This file was generated with po4a. Translate the source file.
+.\"
+.\"*******************************************************************
+.TH SYSCTL.CONF 5 2019\-09\-21 procps\-ng "Formatos de arquivo"
+.SH NOME
+sysctl.conf \- arquivo de configuração/pré\-carregamento do sysctl
+.SH DESCRIÇÃO
+\fBsysctl.conf\fP um arquivo simples contendo valores do sysctl a serem lidos e
+definidos por \fBsysctl\fP. A sintaxe é simples assim:
+.RS
+.sp
+.nf
+.ne 7
+# comentário
+; comentário
+
+token = valor
+.fi
+.RE
+.PP
+Observe que as linhas em branco são ignoradas e o espaço em branco antes e
+depois de um token ou valor é ignorado, embora um valor possa conter espaços
+em branco dentro. Linhas que começam com um # ou ; são consideradas
+comentários e ignoradas.
+
+Se uma linha começar com um único \-, qualquer tentativa de definir o valor
+que falhará será ignorada.
+
+.SH NOTAS
+Como o arquivo \fB/etc/sysctl.conf\fP é usado para substituir os valores padrão
+dos parâmetros do kernel, apenas um pequeno número de parâmetros é
+predefinido no arquivo. Use \fI/sbin/sysctl\ \-a\fP ou siga \fBsysctl\fP(8) para
+listar todos os parâmetros possíveis. A descrição de parâmetros individuais
+pode ser encontrada na documentação do kernel.
+.SH EXEMPLO
+.RS
+.sp
+.nf
+.ne 7
+# exemplo de sysctl.conf
+#
+  kernel.domainname = exemplo.com.br
+; esse tem um espaço que será escrito para o sysctl!
+  kernel.modprobe = /sbin/mod probe
+.fi
+.RE
+.PP
+.SH ARQUIVOS
+.TP 
+/run/sysctl.d/*.conf
+.TQ
+/etc/sysctl.d/*.conf
+.TQ
+/usr/local/lib/sysctl.d/*.conf
+.TQ
+/usr/lib/sysctl.d/*.conf
+.TQ
+/lib/sysctl.d/*.conf
+.TQ
+/etc/sysctl.conf
+Os caminhos onde os arquivos de pré\-carregamento do sysctl geralmente
+existem. Veja também a opção \fI\-\-system\fP do sysctl.
+.SH "VEJA TAMBÉM"
+\fBsysctl\fP(8)
+.SH AUTOR
+.UR staikos@0wned.org
+George Staikos
+.UE
+.SH "RELATANDO ERROS"
+Por favor, envie relatórios de erros para
+.UR procps@freelists.org
+.UE

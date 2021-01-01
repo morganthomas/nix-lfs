@@ -1,0 +1,153 @@
+.\"*******************************************************************
+.\"
+.\" This file was generated with po4a. Translate the source file.
+.\"
+.\"*******************************************************************
+.TH WATCH 1 2018\-03\-03 procps\-ng Användarkommandon
+.SH NAMN
+watch — kör ett program periodiskt och visa utdata i helskärm
+.SH SYNOPSIS
+\fBwatch\fP [\fIflaggor\fP] \fIkommando\fP
+.SH BESKRIVNING
+\fBwatch\fP kör \fIkommando\fP upprepade gånger, och visar dess utmatning och fel
+(den första skärmen).  Detta gör att du kan se programmets utdata ändras
+över tiden.  Som standard körs \fIkommando\fP varannan sekund och \fBwatch\fP körs
+tills det avbryts.
+.SH FLAGGOR
+.TP 
+\fB\-d\fP, \fB\-\-differences\fP [\fIpermanent\fP]
+Markera skillnaderna mellan påföljande uppdateringar.  Flaggan kommer läsa
+ett valfritt argument som ändrar markeringen till att vara permanent, vilket
+gör att man kan se vad som har ändrats åtminstone en gång sedan den första
+iterationen.
+.TP 
+\fB\-n\fP, \fB\-\-interval\fP \fIsekunder\fP
+Ange uppdateringsintervall.  Kommandot kommer inte tillåta snabbare
+uppdateringar än 0,1 sekunders intervall, då mindre värden kommer
+konverteras.  Både ”.” och ”,” fungerar för alla lokaler.
+.TP 
+\fB\-p\fP, \fB\-\-precise\fP
+Gör att \fBwatch\fP försöker köra \fIkommando\fP var \fIintervall\fP sekund.  Prova
+det med \fBntptime\fP och observera hur decimalerna av sekunderna är (nästan)
+desamma, till skillnad mot det normala läget då de ökar kontinuerligt.
+.TP 
+\fB\-t\fP, \fB\-\-no\-title\fP
+Slå av huvudet som visar intervallet, kommandot och aktuell tid längst upp
+på skärmen, liksom den följande tomma raden.
+.TP 
+\fB\-b\fP, \fB\-\-beep\fP
+Pip om kommandot har en slutstatus skild från noll.
+.TP 
+\fB\-e\fP, \fB\-\-errexit\fP
+Frys uppdateringar vid kommandofel, och avsluta efter en tangenttryckning.
+.TP 
+\fB\-g\fP, \fB\-\-chgexit\fP
+Avsluta när utdata från \fIkommando\fP ändras.
+.TP 
+\fB\-c\fP, \fB\-\-color\fP
+Tolka ANSI:s färg\- och stilsekvenser.
+.TP 
+\fB\-x\fP, \fB\-\-exec\fP
+Skicka \fIkommando\fP till \fBexec\fP(2) istället för \fBsh \-c\fP vilket reducerar
+behovet av extra citationstecken för att få den önskade effekten.
+.TP 
+\fB\-h\fP, \fB\-\-help\fP
+Visa hjälptext och avsluta.
+.TP 
+\fB\-v\fP, \fB\-\-version\fP
+Visa versionsinformation och avsluta.
+.SH SLUTSTATUS
+.PP
+.RS
+.PD 0
+.TP 
+\fB0\fP
+Gick bra.
+.TP 
+\fB1\fP
+Diverse fel.
+.TP 
+\fB2\fP
+Att grena av processen att övervaka misslyckades.
+.TP 
+\fB3\fP
+Att ersätta en barnprocess standard ut med skrivsidan av ett rör
+misslyckades.
+.TP 
+\fB4\fP
+Kommandokörningen misslyckades.
+.TP 
+\fB5\fP
+Att stänga barnprocessens skrivrör misslyckades.
+.TP 
+\fB7\fP
+Att skapa ett IPC\-rör misslyckades.
+.TP 
+\fB8\fP
+Att få reda på barnprocessens returvärde med \fBwaitpid\fP(2) misslyckades,
+eller kommandot gav upp vid ett fel.
+.TP 
+\fBövriga\fP
+Watch kommer skicka vidare kommandots slutstatus som barnets slutstatus.
+.SH OBSERVERA
+POSIX flagghantering används (d.v.s., flaggbearbetning slutar vid det första
+argumentet som inte är en flagga).  Detta betyder att flaggor efter
+\fIkommando\fP inte tolkas av \fBwatch\fP självt.
+.SH FEL
+När storleken på terminalen ändras kommer inte skärmen ritas om korrekt
+förrän nästa schemalagda uppdatering.  All markering med \fB\-\-differences\fP
+går också förlorade vid den uppdateringen.
+
+Icke skrivbara tecken tas bort från programs utdata.  Använd ”cat \-v” som en
+del av kommandoröret om du vill se dem.
+
+Kombinerande tecken som är tänkta att visas som tecknet i sista kolumnen på
+skärmen kan komma att visas en kolumn för tidigt, eller kan komma att inte
+visas alls.
+
+Kombinerande tecken räknas aldrig som olika i läget \fI\-\-differences\fP.
+Endast grundtecknet räknas.
+
+Tomma rader direkt efter en rad som slutar i sista kolumnen visas inte.
+
+Läget \fI\-\-precise\fP har inte ännu avancerad temporal distorsionsteknik för
+att kompensera för ett \fIkommando\fP som tar mer än \fIintervall\fP sekunder att
+köra.  \fBwatch\fP kan också hamna i ett läge där det i snabb följd kör så
+många exekveringar det kan av \fIkommando\fP för att komma ifatt efter en
+tidigare körning som varit längre än \fIintervallet\fP (till exempel om
+\fBnetstat\fP tar evigheter för att göra en DNS\-uppslagning).
+.SH EXEMPEL
+.PP
+För att titta efter post skulle du kunna göra
+.IP
+watch \-n 60 from
+.PP
+För att se innehållet i en katalog ändras kan du använda
+.IP
+watch \-d ls \-l
+.PP
+Om du bara är intresserad av filer som ägs av användaren kalle skulle du
+kunna använda
+.IP
+watch \-d 'ls \-l | fgrep kalle'
+.PP
+För att se effekterna av att citera, prova dessa
+.IP
+watch echo $$
+.br
+watch echo '$$'
+.br
+watch echo "'"'$$'"'"
+.PP
+För att se effekten av att hålla tiden med precision, prova att lägga till
+\fI\-p\fP till
+.IP
+watch \-n 10 sleep 1
+.PP
+Du kan se om din administratör installerar den senaste kärnan med
+.IP
+watch uname \-r
+.PP
+(Observera att \fI\-p\fP inte är garanterat att fungera över en omstart,
+särskilt med hänsyn till \fBntpdate\fP eller andra mekanismer som ändrar tiden
+under uppstart)

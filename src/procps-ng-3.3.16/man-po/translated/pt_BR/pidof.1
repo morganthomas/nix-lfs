@@ -1,0 +1,66 @@
+'\" -*- coding: UTF-8 -*-
+.\" Copyright (C) 1998 Miquel van Smoorenburg.
+.\"
+.\" This program is free software; you can redistribute it and/or modify
+.\" it under the terms of the GNU General Public License as published by
+.\" the Free Software Foundation; either version 2 of the License, or
+.\" (at your option) any later version.
+.\"
+.\" This program is distributed in the hope that it will be useful,
+.\" but WITHOUT ANY WARRANTY; without even the implied warranty of
+.\" MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+.\" GNU General Public License for more details.
+.\"
+.\" You should have received a copy of the GNU General Public License
+.\" along with this program; if not, write to the Free Software
+.\" Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
+.\"
+.\"*******************************************************************
+.\"
+.\" This file was generated with po4a. Translate the source file.
+.\"
+.\"*******************************************************************
+.TH PIDOF 1 2019\-09\-21 "" "Comandos de usuário"
+.SH NOME
+pidof \-\- localiza o ID do processo de uma programa em execução.
+.SH SINOPSE
+\fBpidof\fP [\fB\-s\fP] [\fB\-c\fP] [\fB\-x\fP] [\fB\-o\fP \fIpid[,pid..]\fP] [\fB\-o\fP
+\fIpid[,pid..]..\fP] [\fB\-S\fP \fIseparador\fP] \fBprograma\fP [\fBprograma..\fP]
+.SH DESCRIÇÃO
+\fBPidof\fP localiza os IDs de processo (pids) dos programas definidos. Ele
+emite aqueles IDs na saída padrão (stdout).
+.SH OPÇÕES
+.IP \-s
+Single shot \- isso instrui o programa a só retornar um \fIpid\fP.
+.IP \-c
+Retorna apenas IDs de processo que estão em execução com o mesmo diretório
+raiz. Essa opção é ignorada para usuários não\-root, pois eles não poderão
+verificar o diretório raiz atual dos processos que não pertencerem a eles.
+.IP \-x
+Scripts também \- isso faz com que o programa também retorne IDs de processo
+de shells executando os referidos scripts.
+.IP "\-o \fIpid\fP"
+Fala para o \fIpidof\fP para omitir processos com aquele ID de processo. O pid
+especial \fB%PPID\fP pode ser usado para nomear o processo pai do programa
+\fIpidof\fP, isto é, o shell que chamou ou script do shell.
+.IP "\-S \fIseparador\fP"
+Use \fIseparador\fP como um separador colocado entre pids. Usado apenas quando
+mais de um pids são impressos para o programa. A opção \fI\-d\fP é um alias para
+esta opção para compatibilidade com pidof do sysvinit.
+.SH "STATUS DE SAÍDA"
+.TP 
+\fB0\fP
+Ao menos um programa foi localizado com o nome requisitado.
+.TP 
+\fB1\fP
+Nenhum programa foi localizado com o nome requisitado.
+
+.SH ERROS
+Ao usar a opção \fI\-x\fP, \fBpidof\fP possui apenas um método simples para
+detectar scripts e perderá scripts que, por exemplo, usem env. Essa
+limitação se deve à aparência dos scripts no sistema de arquivos proc.
+
+.SH "VEJA TAMBÉM"
+\fBpgrep\fP(1), \fBpkill\fP(1)
+.SH AUTOR
+Jaromir Capik <jcapik@redhat.com>

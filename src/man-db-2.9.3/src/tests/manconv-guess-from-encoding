@@ -1,0 +1,38 @@
+#! /bin/sh
+
+# Test manconv's support for guessing the input encoding if it is not
+# explicitly specified.
+
+: ${srcdir=.}
+. "$srcdir/testlib.sh"
+
+: ${MANCONV=manconv}
+
+init
+
+write_page coding-tag 7 \
+	"$tmpdir/usr/share/man/man7/coding-tag.7" \
+	ISO-8859-1 '' '' 'coding-tag \- é'
+iconv -f ISO-8859-1 -t UTF-8 \
+	<"$tmpdir/usr/share/man/man7/coding-tag.7" \
+	>"$tmpdir/coding-tag.7.exp"
+run $MANCONV -t UTF-8 "$tmpdir/usr/share/man/man7/coding-tag.7" \
+	>"$tmpdir/coding-tag.7.out"
+expect_pass 'recode from encoding guessed from directory name' \
+	'diff -u "$tmpdir/coding-tag.7.exp" "$tmpdir/coding-tag.7.out"'
+
+write_page lang-dir 7 \
+	"$tmpdir/usr/share/man/fr_FR.ISO-8859-1/man7/lang-dir.7.gz" \
+	ISO-8859-1 gz '-*- coding: ISO-8859-1 -*-' 'lang-dir \- é'
+cat >"$tmpdir/lang-dir.7.exp" <<'EOF'
+'\" -*- coding: UTF-8 -*-
+EOF
+zcat "$tmpdir/usr/share/man/fr_FR.ISO-8859-1/man7/lang-dir.7.gz" | \
+	tail -n +2 | iconv -f ISO-8859-1 -t UTF-8 >>"$tmpdir/lang-dir.7.exp"
+run $MANCONV -t UTF-8 \
+	"$tmpdir/usr/share/man/fr_FR.ISO-8859-1/man7/lang-dir.7.gz" \
+	>"$tmpdir/lang-dir.7.out"
+expect_pass 'recode from encoding guessed from directory name' \
+	'diff -u "$tmpdir/lang-dir.7.exp" "$tmpdir/lang-dir.7.out"'
+
+finish

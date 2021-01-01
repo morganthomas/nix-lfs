@@ -1,0 +1,82 @@
+.\" Copyright 1999, George Staikos (staikos@0wned.org)
+.\" This file may be used subject to the terms and conditions of the
+.\" GNU General Public License Version 2, or any later version
+.\" at your option, as published by the Free Software Foundation.
+.\" This program is distributed in the hope that it will be useful,
+.\" but WITHOUT ANY WARRANTY; without even the implied warranty of
+.\" MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+.\" GNU General Public License for more details."
+.\"*******************************************************************
+.\"
+.\" This file was generated with po4a. Translate the source file.
+.\"
+.\"*******************************************************************
+.TH SYSCTL.CONF 5 2019\-09\-21 procps\-ng "Formaty plików"
+.SH NAZWA
+sysctl.conf \- plik wartości początkowych/konfiguracyjny sysctl
+.SH OPIS
+\fBsysctl.conf\fP to prosty plik zawierający wartości sysctl do odczytu i
+ustawienia przez polecenie \fBsysctl\fP. Składnia jest prosta:
+.RS
+.sp
+.nf
+.ne 7
+# komentarz
+; komentarz
+
+token = wartość
+.fi
+.RE
+.PP
+Uwaga: puste linie są ignorowane, także białe znaki przed i po tokenie lub
+wartości są ignorowane, natomiast sama wartość może zawierać białe
+znaki. Linie zaczynające się znakiem # lub ; są uznawane za komentarze i
+ignorowane.
+
+Jeśli linia zaczyna się pojedynczym \-, nieudana próba ustawienia wartości
+będzie zignorowana.
+
+.SH UWAGI
+Jako że plik \fB/etc/sysctl.conf\fP służy do nadpisywania domyślnych wartości
+parametrów jądra, tylko niewielka liczba parametrów jest predefiniowana w
+tym pliku. Aby wypisać wszystkie możeliwe parametry, należy użyć
+\fI/sbin/systcl\ \-a\fP lub zajrzeć do \fBsysctl\fP(8). Opis poszczególnych
+parametrów można znaleźć w dokumentacji jądra.
+.SH PRZYKŁAD
+.RS
+.sp
+.nf
+.ne 7
+# przykładowy sysctl.conf
+#
+  kernel.domainname = example.com
+; ta wartość zawiera spację, która zostanie zapisana do sysctl!
+  kernel.modprobe = /sbin/mod probe
+.fi
+.RE
+.PP
+.SH PLIKI
+.TP 
+/run/sysctl.d/*.conf
+.TQ
+/etc/sysctl.d/*.conf
+.TQ
+/usr/local/lib/sysctl.d/*.conf
+.TQ
+/usr/lib/sysctl.d/*.conf
+.TQ
+/lib/sysctl.d/*.conf
+.TQ
+/etc/sysctl.conf
+Ścieżki, gdzie zwykle istnieją pliki do automatycznego wczytywania
+sysctl. P. także opcja sysctl \fI\-\-system\fP.
+.SH "ZOBACZ TAKŻE"
+\fBsysctl\fP(8)
+.SH AUTOR
+.UR staikos@0wned.org
+George Staikos
+.UE
+.SH "ZGŁASZANIE BŁĘDÓW"
+Zgłoszenia błędów prosimy wysyłać na adres
+.UR procps@freelists.org
+.UE

@@ -1,0 +1,205 @@
+.\"
+.\" Copyright 2000 Kjetil Torgrim Homme
+.\"           2017 Craig Small
+.\"
+.\" This program is free software; you can redistribute it and/or modify
+.\" it under the terms of the GNU General Public License as published by
+.\" the Free Software Foundation; either version 2 of the License, or
+.\" (at your option) any later version.
+.\"
+.\"*******************************************************************
+.\"
+.\" This file was generated with po4a. Translate the source file.
+.\"
+.\"*******************************************************************
+.TH PGREP 1 2019\-03\-05 procps\-ng Användarkommandon
+.SH NAMN
+pgrep, pkill — slå upp eller signalera processer baserat på namn eller andra
+attribut
+.SH SYNOPSIS
+\fBpgrep\fP [flaggor] mönster
+.br
+\fBpkill\fP [flaggor] mönster
+.SH BESKRIVNING
+\fBpgrep\fP letar igenom de just nu körande processerna och listar de
+process\-ID:n som matchar urvalskriterierna till standard ut.  Alla
+kriterierna måste matcha.  Till exempel,
+.IP
+$ pgrep \-u root sshd
+.PP
+kommer endast lista processerna som heter \fBsshd\fP OCH ägs av \fBroot\fP.  Å
+andra sidan,
+.IP
+$ pgrep \-u root,daemon
+.PP
+kommer lista processerna som ägs av \fBroot\fP ELLER \fBdaemon\fP.
+.PP
+\fBpkill\fP kommer skicka den angivna signalen (\fBSIGTERM\fP som standard) till
+varje process istället för att lista dem på standard ut.
+.SH FLAGGOR
+.TP 
+\fB\-\fP\fIsignal\fP
+.TQ
+\fB\-\-signal\fP \fIsignal\fP
+Definierar signalen att skicka till varje matchad process.  Både det
+numeriska eller det symboliska signalnamnet kan användas.  (Endast
+\fBpkill\fP.)
+.TP 
+\fB\-c\fP, \fB\-\-count\fP
+Utelämna normal utmatning; skriv istället antalet processer som matchar.
+När antalet inte matchar något, d.v.s. returnerar noll, kommer kommandot
+returnera ett värde skilt från noll.
+.TP 
+\fB\-d\fP, \fB\-\-delimiter\fP \fIavgränsare\fP
+Sätter strängen som används för att avgränsa varje process\-ID i utdata
+(nyrad som standard).  (Endast \fBpgrep\fP.)
+.TP 
+\fB\-f\fP, \fB\-\-full\fP
+\fIMönstret\fP matchas normalt endast mot processnamnet.  När \fB\-f\fP anges
+används hela kommandoraden.
+.TP 
+\fB\-g\fP, \fB\-\-pgroup\fP \fIpgrp\fP,…
+Matcha endast processer i de processgrupper vars ID listas.  Processgrupp 0
+översätts till \fBpgrep\fPs eller \fBpkill\fPs egen processgrupp.
+.TP 
+\fB\-G\fP, \fB\-\-group\fP \fIgid\fP,…
+Matcha endast processer vars verkliga grupp\-ID listas.  Både det numeriska
+och det symboliska värdet kan användas.
+.TP 
+\fB\-i\fP, \fB\-\-ignore\-case\fP
+Matcha processer skiftlägesokänsligt.
+.TP 
+\fB\-l\fP, \fB\-\-list\-name\fP
+Lista processnamnet såväl som process\-ID:t.  (Endast \fBpgrep\fP.)
+.TP 
+\fB\-a\fP, \fB\-\-list\-full\fP
+Lista den fullständiga kommandoraden såväl som process\-ID:t.  (Endast
+\fBpgrep\fP.)
+.TP 
+\fB\-n\fP, \fB\-\-newest\fP
+Välj endast den nyaste (senast startade) av de matchande processerna.
+.TP 
+\fB\-o\fP, \fB\-\-oldest\fP
+Välj endast den äldsta (minst nyligen startade) av de matchande processerna.
+.TP 
+\fB\-P\fP, \fB\-\-parent\fP \fIfpid\fP,…
+Matcha endast processer vars föräldraprocess\-ID listas.
+.TP 
+\fB\-s\fP, \fB\-\-session\fP \fIsid\fP,…
+Matcha endast processer vars processessions\-ID listas.  Sessions\-ID 0
+översätts till \fBpgrep\fPs eller \fBpkill\fPs eget sessions\-ID.
+.TP 
+\fB\-t\fP, \fB\-\-terminal\fP \fIterm\fP,…
+Matcha endast processer vars styrande terminal listas.  Terminalnamnet skall
+anges utan prefixet ”/dev/”.
+.TP 
+\fB\-u\fP, \fB\-\-euid\fP \fIeaid\fP,…
+Matcha endast processer vars effektiva användar\-ID listas.  Både det
+numeriska och symboliska värdet kan användas.
+.TP 
+\fB\-U\fP, \fB\-\-uid\fP \fIaid\fP,…
+Matcha endast processer vars verkliga användar\-ID listas.  Både det
+numeriska och symboliska värdet kan användas.
+.TP 
+\fB\-v\fP, \fB\-\-inverse\fP
+Negerar matchningen.  Denna flagga används oftast i \fBpgrep\fPs sammanhang.  I
+\fBpkill\fPs sammanhang är den korta flaggan avaktiverad för att undvika att
+flaggan används av misstag.
+.TP 
+\fB\-w\fP, \fB\-\-lightweight\fP
+Visar alla tråd\-id:n istället för pid:n i \fBpgrep\fPs sammanhang.  I \fBpkill\fPs
+sammanhang är denna flagga avaktiverad.
+.TP 
+\fB\-x\fP, \fB\-\-exact\fP
+Matcha endast processer vars namn (eller kommandorad om \-f anges) \fBexakt\fP
+matchar \fImönstret\fP.
+.TP 
+\fB\-F\fP, \fB\-\-pidfile\fP \fIfil\fP
+Läs \fIPID\fP:n från en fil.  Denna flagga är kanske mer användbar för \fBpkill\fP
+än \fBpgrep\fP.
+.TP 
+\fB\-L\fP, \fB\-\-logpidfile\fP
+Misslyckas om pid\-filen (se \-F) inte är låst.
+.TP 
+\fB\-r\fP, \fB\-\-runstates\fP \fID,R,S,Z\fP,…
+Matcha endast processer mat matchar processtillståndet.
+.TP 
+\fB\-\-ns \fP\fIpid\fP
+Matcha processer som hör till samma namnrymder.  Måste köras som root för
+att matcha andra användares processer.  Se \-\-nslist för hur man begränsar
+vilka namnrymder som skall matchas.
+.TP 
+\fB\-\-nslist \fP\fInamn\fP\fB,…\fP
+Matcha endast de angivna namnrymderna.  Tillgängliga namnrymder: ipc, mnt,
+net, pid, user, uts.
+.TP 
+\fB\-V\fP, \fB\-\-version\fP
+Visa versionsinformation och avsluta.
+.TP 
+\fB\-h\fP, \fB\-\-help\fP
+Visa hjälp och avsluta.
+.PD
+.SH OPERANDER
+.TP 
+\fImönster\fP
+Specificerar ett utökat reguljärt uttryck att matcha mot processnamnen eller
+kommandoraderna.
+.SH EXEMPEL
+Exempel 1: Hitta process\-ID:t för demonen \fBnamed\fP:
+.IP
+$ pgrep \-u root named
+.PP
+Exempel 2: Få \fBsyslog\fP att läsa om sin konfigurationsfil:
+.IP
+$ pkill \-HUP syslogd
+.PP
+Exempel 3: Ge detaljerad information om alla \fBxterm\fP\-processer:
+.IP
+$ ps \-fp $(pgrep \-d, \-x xterm)
+.PP
+Exempel 4: Få alla \fBchrome\fP\-processer köra med nice:
+.IP
+$ renice +4 $(pgrep chrome)
+.SH SLUTSTATUS
+.PD 0
+.TP 
+0
+En eller flera processer matchar kriterierna.  För pkill måste även
+processen framgångsrikt ha signalerats.
+.TP 
+1
+Inga processer matchade eller inga av dem kunde signaleras.
+.TP 
+2
+Syntaxfel på kommandoraden.
+.TP 
+3
+Ödesdigert fel: slut på minne etc.
+.PD
+.SH OBSERVERA
+Processnamnet som används för att matcha är begränsat till de 15 tecknen som
+är med i utdata från /proc/\fIpid\fP/stat.  Använd flaggan \-f för att matcha
+mot den fullständiga kommandoraden, /proc/\fIpid\fP/cmdline.
+.PP
+Den körande \fBpgrep\fP\- eller \fBpkill\fP\-processen kommer aldrig rapportera sig
+själv som en matchning.
+.SH FEL
+Flaggorna \fB\-n\fP och \fB\-o\fP och \fB\-v\fP kan inte kombineras.  Berätta för mig om
+du behöver kunna göra detta.
+.PP
+Döda (defunct) processer rapporteras.
+
+.SH "SE ÄVEN"
+\fBps\fP(1), \fBregex\fP(7), \fBsignal\fP(7), \fBkillall\fP(1), \fBskill\fP(1), \fBkill\fP(1),
+\fBkill\fP(2)
+.SH UPPHOVSMAN
+.UR kjetilho@ifi.uio.no
+Kjetil Torgrim Homme
+.UE
+.SH "RAPPORTERA FEL"
+Skicka felrapporter till
+.UR procps@freelists.org
+.UE
+Skicka synpunkter på översättningen till
+.UR tp\-sv@listor.tp\-sv.se
+.UE

@@ -1,0 +1,207 @@
+.\"
+.\" Copyright 2000 Kjetil Torgrim Homme
+.\"           2017 Craig Small
+.\"
+.\" This program is free software; you can redistribute it and/or modify
+.\" it under the terms of the GNU General Public License as published by
+.\" the Free Software Foundation; either version 2 of the License, or
+.\" (at your option) any later version.
+.\"
+.\"*******************************************************************
+.\"
+.\" This file was generated with po4a. Translate the source file.
+.\"
+.\"*******************************************************************
+.TH PGREP 1 2019\-03\-05 procps\-ng "Comandos de usuário"
+.SH NOME
+pgrep, pkill \- procura ou sinaliza processos com base em nomes e outros
+atributos
+.SH SINOPSE
+\fBpgrep\fP [opções] padrão
+.br
+\fBpkill\fP [opções] padrão
+.SH DESCRIÇÃO
+\fBpgrep\fP examina os processos atualmente em execução e lista os IDs de
+processo que combinam os critérios de seleção para stdout (saída
+padrão). Todos os critérios devem corresponder. Por exemplo,
+.IP
+$ pgrep \-u root sshd
+.PP
+vai listar apenas os processos chamados \fBsshd\fP E pertencentes ao
+\fBroot\fP. Por outro lado,
+.IP
+$ pgrep \-u root,daemon
+.PP
+vai listar os processos pertencentes ao \fBroot\fP OU \fBdaemon\fP.
+.PP
+\fBpkill\fP vai enviar um sinal especificado (por padrão, \fBSIGTERM\fP) para cada
+processo em vez de listá\-los na stdout (saída padrão).
+.SH OPÇÕES
+.TP 
+\fB\-\fP\fIsinal\fP
+.TQ
+\fB\-\-signal\fP \fIsinal\fP
+Define o sinal para enviar para cada processo correspondente. Tanto nome
+numérico quanto o simbólico do sinal podem ser usado. (\fBpkill\fP apenas)
+.TP 
+\fB\-c\fP, \fB\-\-count\fP
+Suprime a saída normal; em vez disso, imprime uma contagem de processos que
+correspondem. Quando a contagem não coincide com nada, por exemplo, retorna
+zero, o comando retornará valor diferente de zero.
+.TP 
+\fB\-d\fP, \fB\-\-delimiter\fP \fIdelimitador\fP
+Define a sequência usada para delimitar cada ID de processo na saída (por
+padrão, uma nova linha). (\fBpgrep\fP apenas.)
+.TP 
+\fB\-f\fP, \fB\-\-full\fP
+O \fIpadrão\fP normalmente é analisado pelo nome do processo. Quando \fB\-f\fP está
+configurado, a linha de comando completa é usada.
+.TP 
+\fB\-g\fP, \fB\-\-pgroup\fP \fIpgrp\fP,...
+Corresponde apenas os processos nos IDs de grupo de processo listados. O
+grupo de processos 0 é traduzido para o grupo de processos do próprio
+\fBpgrep\fP ou \fBpkill\fP.
+.TP 
+\fB\-G\fP, \fB\-\-group\fP \fIgid\fP,...
+Corresponde apenas os processos cujo ID de grupo real está listado. Ou o
+valor numérico ou simbólico pode ser usado.
+.TP 
+\fB\-i\fP, \fB\-\-ignore\-case\fP
+Corresponde processos sem diferenciar maiúsculo/minúsculo.
+.TP 
+\fB\-l\fP, \fB\-\-list\-name\fP
+Lista o nome do processo, bem como o ID do processo. (\fBpgrep\fP apenas.)
+.TP 
+\fB\-a\fP, \fB\-\-list\-full\fP
+Lista o linha de comando completa, bem como o ID do processo. (\fBpgrep\fP
+apenas.)
+.TP 
+\fB\-n\fP, \fB\-\-newest\fP
+Seleciona apenas o mais novo (iniciado mais recentemente) dos processos
+correspondentes.
+.TP 
+\fB\-o\fP, \fB\-\-oldest\fP
+Seleciona apenas o mais antigo (iniciado menos recentemente) dos processos
+correspondentes.
+.TP 
+\fB\-P\fP, \fB\-\-parent\fP \fIppid\fP,...
+Corresponde apenas processos cujo ID de processo pai está listado.
+.TP 
+\fB\-s\fP, \fB\-\-session\fP \fIsid\fP,...
+Corresponde apenas os processos cujo ID de sessão de processo está
+listado. ID de Sessão 0 é traduzido para o ID de sessão do próprio \fBpgrep\fP
+ou \fBpkill\fP.
+.TP 
+\fB\-t\fP, \fB\-\-terminal\fP \fIterm\fP,...
+Corresponde apenas os processos cujo terminal controlador está listado. O
+nome do terminal deve ser especificado sem o prefixo "/dev/".
+.TP 
+\fB\-u\fP, \fB\-\-euid\fP \fIeuid\fP,...
+Corresponde apenas os processos cujo ID de usuário efetivo está listado. Ou
+o valor numérico ou simbólico pode ser usado.
+.TP 
+\fB\-U\fP, \fB\-\-uid\fP \fIuid\fP,...
+Corresponde apenas os processos cujo ID de usuário real está listado. Ou o
+valor numérico ou simbólico pode ser usado.
+.TP 
+\fB\-v\fP, \fB\-\-inverse\fP
+Nega a correspondência. Essa opção geralmente é usada no contexto do
+\fBpgrep\fP. No contexto do \fBpkill\fP, a opção curta está desabilitada para
+evitar uso acidental da opção.
+.TP 
+\fB\-w\fP, \fB\-\-lightweight\fP
+Mostra todos os IDs de thread em vez dos pids no contexto do \fBpgrep\fP. No
+contexto do \fBpkill\fP, essa opção está desabilitada.
+.TP 
+\fB\-x\fP, \fB\-\-exact\fP
+Corresponde apenas a processos cujos nomes (ou linha de comando, se \-f for
+especificado) corresponderem \fBexatamente\fP ao \fIpadrão\fP.
+.TP 
+\fB\-F\fP, \fB\-\-pidfile\fP \fIarquivo\fP
+Lê os \fIPID\fPs do arquivo. Essa opção é talvez seja mais útil para \fBpkill\fP
+do que \fBpgrep\fP.
+.TP 
+\fB\-L\fP, \fB\-\-logpidfile\fP
+Falha se o arquivo de pid (veja \-F) não estiver travado.
+.TP 
+\fB\-r\fP, \fB\-\-runstates\fP \fID,R,S,Z,\fP...
+Corresponde apenas processos que correspondem ao estado de processo.
+.TP 
+\fB\-\-ns \fP\fIpid\fP
+Corresponde processos que pertencem aos mesmos espaços de nomes. É
+necessário executar como root para corresponder processos de outros
+usuários. Veja \-\-nslist para como limitar quais espaços de nomes para
+corresponder.
+.TP 
+\fB\-\-nslist \fP\fInome\fP\fB,...\fP
+Corresponde apenas aos espaços de nomes fornecidos. Espaços de nomes
+disponíveis: ipc, mnt, net, pid, user, uts.
+.TP 
+\fB\-V\fP, \fB\-\-version\fP
+Exibe informação da versão e sai.
+.TP 
+\fB\-h\fP, \fB\-\-help\fP
+Exibe a ajuda e sai.
+.PD
+.SH OPERANDOS
+.TP 
+\fIpadrão\fP
+Especifica uma expressão regular estendida para corresponder nomes de
+processos ou linhas de comandos.
+.SH EXEMPLOS
+Exemplo 1: Localizar o ID de processo do daemon \fBnamed\fP:
+.IP
+$ pgrep \-u root named
+.PP
+Exemplo 2: Fazer o \fBsyslog\fP reler seu arquivo de configuração:
+.IP
+$ pkill \-HUP syslogd
+.PP
+Exemplo 3: Fornecer informação detalhada todos processos de \fBxterm\fP:
+.IP
+$ ps \-fp $(pgrep \-d, \-x xterm)
+.PP
+Exemplo 4: Fazer todos os processos \fBchrome\fP serem executados com nice
+maior:
+.IP
+$ renice +4 $(pgrep chrome)
+.SH "STATUS DE SAÍDA"
+.PD 0
+.TP 
+0
+Um ou mais processos corresponderam aos critérios. Para pkill, o processo
+também deve ter sido sinalizado com sucesso.
+.TP 
+1
+Nenhum processo correspondido ou nenhum deles pode ser sinalizado.
+.TP 
+2
+Erro de sintaxe na linha de comando.
+.TP 
+3
+Erro fatal: memória insuficiente etc.
+.PD
+.SH NOTAS
+O nome do processo usado para corresponder está limitado a 15 caracteres
+presentes na saída de /proc/\fIpid\fP/stat. Use a opção \-f para corresponder a
+linha de comando completa, /proc/\fIpid\fP/cmdline.
+.PP
+O processo em execução do \fBpgrep\fP ou \fBpkill\fP nunca vai relatar a si
+próprio como correspondência.
+.SH ERROS
+As opções \fB\-n\fP, \fB\-o\fP e \fB\-v\fP não podem ser combinadas. Me avise se você
+precisar fazer isso.
+.PP
+Os processos defeituosos são relatados.
+
+.SH "VEJA TAMBÉM"
+\fBps\fP(1), \fBregex\fP(7), \fBsignal\fP(7), \fBkillall\fP(1), \fBskill\fP(1), \fBkill\fP(1),
+\fBkill\fP(2)
+.SH AUTOR
+.UR kjetilho@ifi.uio.no
+Kjetil Torgrim Homme
+.UE
+.SH "RELATANDO ERROS"
+Por favor, envie relatórios de erros para
+.UR procps@freelists.org
+.UE

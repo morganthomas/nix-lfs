@@ -1,0 +1,46 @@
+#! /bin/sh
+
+# Test man-recode's --in-place behaviour.
+
+: ${srcdir=.}
+. "$srcdir/testlib.sh"
+
+: ${MAN_RECODE=man-recode}
+
+init
+
+cat >"$tmpdir/a.1.exp" <<'EOF'
+.SH NAME
+a \- á
+EOF
+cp "$tmpdir/a.1.exp" "$tmpdir/a.1"
+cat >"$tmpdir/b.1.exp" <<'EOF'
+'\" -*- coding: UTF-8 -*-
+.SH NAME
+b \- é
+EOF
+gzip -c <"$tmpdir/b.1.exp" >"$tmpdir/b.1.gz"
+cat >"$tmpdir/c.1.exp" <<'EOF'
+'\" -*- coding: UTF-8
+.SH NAME
+b \- é
+EOF
+cat >"$tmpdir/c.1" <<'EOF'
+'\" -*- coding: ISO-8859-1
+EOF
+<"$tmpdir/c.1.exp" tail -n +2 | iconv -f UTF-8 -t ISO-8859-1 >>"$tmpdir/c.1"
+gzip "$tmpdir/c.1"
+
+run $MAN_RECODE -t UTF-8 --in-place \
+	"$tmpdir/a.1" "$tmpdir/b.1.gz" "$tmpdir/c.1.gz"
+expect_pass '--in-place with no coding tag' \
+	'diff -u "$tmpdir/a.1.exp" "$tmpdir/a.1"'
+expect_pass '--in-place with gzip and coding tag matching target encoding' \
+	'diff -u "$tmpdir/b.1.exp" "$tmpdir/b.1"'
+expect_pass \
+	'--in-place with gzip and coding tag not matching target encoding' \
+	'diff -u "$tmpdir/c.1.exp" "$tmpdir/c.1"'
+expect_pass '--in-place removes compressed input files' \
+	'test ! -f "$tmpdir/b.1.gz" && test ! -f "$tmpdir/c.1.gz"'
+
+finish
